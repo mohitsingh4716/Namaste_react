@@ -1,12 +1,14 @@
 import RestaurantCard from "./RestaurantCard";
 import { useEffect, useState } from "react";
 import Shimmer from "./Shimmer";
+import { Link } from "react-router-dom";
+import { RESLIST_API } from "../utils/constants";
 
 const Body = () => {
   // Local state variables -> super powerful variables
   const [ListOfRestaurants, setListOfRestaurant] = useState([]);
 
-  const[filteredRestaurant, setfilteredRestaurant]= useState([]);
+  const [filteredRestaurant, setfilteredRestaurant] = useState([]);
 
   const [serachText, setSearchText] = useState("");
   console.log("body rendered");
@@ -17,7 +19,7 @@ const Body = () => {
 
   const fetchData = async () => {
     const data = await fetch(
-      "https://www.swiggy.com/mapi/restaurants/list/v5?offset=0&is-seo-homepage-enabled=true&lat=28.5355161&lng=77.3910265&carousel=true&third_party_vendor=1"
+      RESLIST_API
     );
 
     const json = await data.json();
@@ -26,14 +28,15 @@ const Body = () => {
     setListOfRestaurant(
       json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
-    setfilteredRestaurant(json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+    setfilteredRestaurant(
+      json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
     console.log(ListOfRestaurants);
   };
 
   //   conditional Rendering-> render on any contion
 
-  return (ListOfRestaurants.length === 0) ? (
+  return ListOfRestaurants.length === 0 ? (
     <Shimmer />
   ) : (
     <div className="body">
@@ -78,7 +81,13 @@ const Body = () => {
       </div>
       <div className="res-container">
         {filteredRestaurant.map((restaurant) => (
-          <RestaurantCard key={restaurant.info.id} resData={restaurant} />
+          // console.log(restaurant),
+          <Link
+            key={restaurant.info.id}
+            to={"/restaurants/" + restaurant.info.id}
+          >
+            <RestaurantCard resData={restaurant} />
+          </Link>
         ))}
       </div>
     </div>

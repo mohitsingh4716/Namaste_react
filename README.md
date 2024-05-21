@@ -62,3 +62,8 @@ Namaste React 🚀
   -useEffect()
 
   ->Whenever  State variables updates REact Rerender the components
+
+
+ # 2 Types Of Routing in web apps
+   -Client side Routing
+   -Server side Routing
