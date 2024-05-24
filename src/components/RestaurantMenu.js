@@ -1,26 +1,29 @@
-import { useEffect, useState } from "react";
+
 import Shimmer from "./Shimmer";
 import { useParams } from "react-router-dom";
-import { MENU_API } from "../utils/constants";
+import useRestauratMenu from "../utils/useRestaurantMenu";
 
 const RestaurantMenu = () => {
-  const [resInfo, setResInfo] = useState(null); // holds a restaurants details
+  
 
   const { resId } = useParams();  // call useParam to get value of restaurant Id(resId) using object destructuring.
 
-  useEffect(() => {
-    fetchMenu();
-  }, []);
+  const resInfo= useRestauratMenu(resId); // use own hooks to write a code in modular way 
 
-  const fetchMenu = async () => {
-    const data = await fetch(MENU_API + resId); // fetching menu data
-    const jsonResData = await data.json(); // converting fetched data to json
 
-    console.log(jsonResData);
+  // useEffect(() => {
+  //   fetchMenu();
+  // }, []);
 
-    // set Restaurant 
-    setResInfo(jsonResData.data);
-  };
+  // const fetchMenu = async () => {
+  //   const data = await fetch(MENU_API + resId); // fetching menu data
+  //   const jsonResData = await data.json(); // converting fetched data to json
+
+  //   console.log(jsonResData);
+
+  //   // set Restaurant 
+  //   setResInfo(jsonResData.data);
+  // };
 
   if (resInfo === null) return <Shimmer />;
 
@@ -32,7 +35,7 @@ const RestaurantMenu = () => {
   const { itemCards } =
     resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]?.card?.card;
 
-  // console.log(itemCards);
+  console.log(itemCards);
 
   return (
     <div className="menu">

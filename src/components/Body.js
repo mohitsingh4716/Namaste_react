@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import { RESLIST_API } from "../utils/constants";
+import useOnlineStatus from "../utils/useOnlineStatus";
 
 const Body = () => {
   // Local state variables -> super powerful variables
@@ -18,9 +19,7 @@ const Body = () => {
   }, []);
 
   const fetchData = async () => {
-    const data = await fetch(
-      RESLIST_API
-    );
+    const data = await fetch(RESLIST_API);
 
     const json = await data.json();
 
@@ -33,6 +32,17 @@ const Body = () => {
     );
     console.log(ListOfRestaurants);
   };
+
+  // check for onlineStatus 
+  const OnlineStatus = useOnlineStatus();
+
+  if (OnlineStatus === false) {
+    return(
+    <h1>
+      Looks like you're offline !! please check your Internet Connection{" "}
+    </h1>
+    )
+  }
 
   //   conditional Rendering-> render on any contion
 
@@ -81,7 +91,7 @@ const Body = () => {
       </div>
       <div className="res-container">
         {filteredRestaurant.map((restaurant) => (
-          // console.log(restaurant), 
+          // console.log(restaurant),
           <Link
             key={restaurant.info.id}
             to={"/restaurants/" + restaurant.info.id}
